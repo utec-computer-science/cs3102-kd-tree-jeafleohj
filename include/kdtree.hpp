@@ -2,19 +2,29 @@
 #define KDTREE_HPP
 
 #include  <vector>
+#include  <iostream>
 
 template <class T, size_t k>
 struct KDTree {
     struct Point{
         std::vector<T> tuple;
         Point() : tuple(k)
-        {};
+        {}
+
         Point(const Point& point) : tuple(k)
         {
             for(int i = 0; i<k; ++i) {
                 tuple[i] = point.tuple[i];
             }
-        };
+        }
+
+        Point(const std::vector<T> _tuple) : tuple(k)
+        {
+            for(int i = 0; i<k; ++i) {
+                tuple[i] = _tuple[i];
+            }
+        }
+
         bool operator==(const Point point) const {
             for(int i = 0; i<k; ++i) {
                 if(tuple[i] != point.tuple[i])
@@ -41,7 +51,7 @@ struct KDTree {
 
         unsigned n_axis = 0;
         Node **node = &root;
-        T* value = nullptr;
+        T value;
 
         for (;*node;) {
             value = (*node)->point.tuple[n_axis];
@@ -58,15 +68,14 @@ struct KDTree {
 
     bool find(const Point& point) {
         if(root == nullptr) return false;
-        
         Node **node = &root;
-        T* value = nullptr;
+        T value;
         unsigned n_axis = 0;
 
         for (;*node;) {
-            if(node->point == point) return true;
+            if((*node)->point == point) return true;
 
-            value = (*node)->value.tuple[n_axis];
+            value = (*node)->point.tuple[n_axis];
 
             if(point.tuple[n_axis] == value ){
                 node = &(*node)->left;
