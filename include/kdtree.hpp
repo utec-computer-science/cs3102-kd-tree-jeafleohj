@@ -86,7 +86,7 @@ struct KDTree {
             n_axis = (n_axis + 1)%k;
         }
 
-        return true;
+        return false;
     }
 };
 
